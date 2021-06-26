@@ -85,13 +85,114 @@ public class Main {
 
 
 //#######################################################//
-
+/*
 Time Complexity -O(N)
 Space Complexity -O(N)
-
+*/
 //####################################################//
 
 
 
+//````````````````````````````````````````````````````````````````````````
 
+/*
+OPTIMIZED VERSION OF ABOVE 
 
+// SOLVE SUDOKU USING BACKTRACKING
+
+*/
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+  public static void display(int[][] board){
+    for(int i = 0; i < board.length; i++){
+      for(int j = 0; j < board[0].length; j++){
+        System.out.print(board[i][j] + " ");
+      }
+      System.out.println();
+    }
+  }
+
+  public static void solveSudoku(int[][] board, int i, int j) {
+    if(i == board.length){
+        display(board);
+        return;
+    }
+    int nextRow =0;
+    int nextCol = 0;
+    
+    if(j == board[0].length-1){
+        nextRow = i+1;
+        nextCol =0;
+    }else{
+        nextRow = i;
+        nextCol = j+1;
+    }
+    
+    if(board[i][j] != 0){
+        solveSudoku(board,nextRow,nextCol);
+    }else{
+        for(int possibleOption =1; possibleOption <= 9; possibleOption++){
+            if(isValid(board,i,j,possibleOption) == true){
+                board[i][j] = possibleOption;
+                solveSudoku(board,nextRow,nextCol);
+                board[i][j] = 0;
+            }
+        }
+    }
+    
+  }
+  private static boolean isValid(int[][]board,int x,int y,int val){
+      // check for every column in a row
+      for(int j=0;j<board[0].length;j++){
+          if(board[x][j] == val){
+              return false;
+          }
+      }
+      
+      // check for every row in a column
+      for(int i=0;i<board.length;i++){
+          if(board[i][y] == val){
+              return false;
+          }
+      }
+      
+      // check in 3*3 submatrix
+      
+      int row = x/3*3; // starting pt. of row of the submatrix
+      int col = y/3*3; // starting pt. of column of the submatrix
+      
+      
+      for(int i=0;i<3;i++){
+          for(int j=0;j<3;j++){
+              if(board[row+i][col+j] == val){
+                  return false;
+              }
+          }
+      }
+      return true;
+  }
+
+  public static void main(String[] args) throws Exception {
+    Scanner scn = new Scanner(System.in);
+    int[][] arr = new int[9][9];
+    for (int i = 0; i < 9; i++) {
+      for (int j = 0; j < 9; j++) {
+        arr[i][j] = scn.nextInt();
+      }
+    }
+
+    solveSudoku(arr, 0, 0);
+  }
+}
+
+//########################################################################
+
+/*
+TIME COMPLEXITY- O(N)
+SPACE COMPLEXITY -O(1)
+  
+  */
+//##############################################################
